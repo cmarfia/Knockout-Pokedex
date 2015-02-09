@@ -16,7 +16,7 @@ namespace PokedexApi
 
             config.Routes.MapHttpRoute(
                 name: "Pokemon",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional, controller = "Pokedex" }
             );
         }

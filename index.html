@@ -1,36 +1,126 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <title>Product App</title>
-</head>
-<body>
+﻿<div id="message-box">
 
-  <div>
-    <h2>All Products</h2>
-    <ul id="products" />
-  </div>
-  <div>
-    <h2>Search by ID</h2>
-    <input type="text" id="prodId" size="5" />
-    <input type="button" value="Search" onclick="find();" />
-    <p id="product" />
-  </div>
+</div>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+<script>
+    var uri = 'api/pokedex/',
+        doneFunc = function (data) {
+            console.log(data);
+            $("#message-box").append("<p>" + data + "</p>");
+        };
 
-  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
-  <script>
-      var uri = 'api/pokedex/get';
 
-      $(document).ready(function () {
-          // Send an AJAX request
-          $.getJSON(uri)
-              .done(function (data) {
-                  // On success, 'data' contains a list of products.
-                  $.each(data, function (key, item) {
-                      // Add a list item for the product.
-                      $('<li>', { text: item }).appendTo($('#products'));
-                  });
-              });
-      });
-  </script>
-</body>
-</html>
+    $(document).ready(function () {
+        $.ajax({
+            url: uri + 'GetPokedex',
+            type: "GET",
+            data: { pageNumber: 1, pageSize: 10 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetPokemon',
+            type: "GET",
+            data: { pokemonId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetSpritesByPokemon',
+            type: "GET",
+            data: { pokemonId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetSprite',
+            type: "GET",
+            data: { spriteId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetDescriptionsByPokemon',
+            type: "GET",
+            data: { pokemonId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetDescription',
+            type: "GET",
+            data: { descriptionId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetTypesByPokemon',
+            type: "GET",
+            data: { pokemonId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetType',
+            type: "GET",
+            data: { typeId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetMovesByPokemon',
+            type: "GET",
+            data: { pokemonId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetMove',
+            type: "GET",
+            data: { moveId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetAbilitiesByPokemon',
+            type: "GET",
+            data: { pokemonId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetAbility',
+            type: "GET",
+            data: { abilityId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetEvolutionChainByPokemon',
+            type: "GET",
+            data: { pokemonId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+
+        $.ajax({
+            url: uri + 'GetNavigationByPokemon',
+            type: "GET",
+            data: { pokemonId: 1 },
+            dataType: "json"
+        })
+        .done(doneFunc);
+    });
+</script>
