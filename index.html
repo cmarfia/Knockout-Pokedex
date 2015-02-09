@@ -27,7 +27,7 @@
     var uri = 'api/pokedex/',
         doneFunc = function (data) {
             console.log(data);
-            $("#message-box").append("<p>" + data + "</p>");
+            $("#message-box").append("<p>" + JSON.stringify(data) + "</p>");
         };
 
 
@@ -51,7 +51,7 @@
         $.ajax({
             url: uri + 'GetSpritesByPokemon',
             type: "GET",
-            data: { pokemonId: 1 },
+            data: { pokemonId: 732 },
             dataType: "json"
         })
         .done(doneFunc);
