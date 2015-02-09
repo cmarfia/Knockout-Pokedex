@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="PokemonApi" Class="PokedexDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(local)\MSSQLSERVER_2012;Initial Catalog=PokemonApi;Integrated Security=True" SettingsObjectName="PokedexImport.Properties.Settings" SettingsPropertyName="PokemonApiConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Ability" Member="Abilities">
+    <Type Name="Ability">
+      <Column Name="AbilityId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PkApiId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="ResourceUri" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Ability_PokemonAbility" Member="PokemonAbilities" ThisKey="AbilityId" OtherKey="AbilityId" Type="PokemonAbility" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TypeToTypeEffect" Member="TypeToTypeEffects">
+    <Type Name="TypeToTypeEffect">
+      <Column Name="TypeToTypeEffectId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AgainstTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TypeEffectId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Type_TypeToTypeEffect" Member="Type" ThisKey="TypeId" OtherKey="TypeId" Type="Type" IsForeignKey="true" />
+      <Association Name="Type_TypeToTypeEffect1" Member="Type1" ThisKey="AgainstTypeId" OtherKey="TypeId" Type="Type" IsForeignKey="true" />
+      <Association Name="TypeEffect_TypeToTypeEffect" Member="TypeEffect" ThisKey="TypeEffectId" OtherKey="TypeEffectId" Type="TypeEffect" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Description" Member="Descriptions">
+    <Type Name="Description">
+      <Column Name="DescriptionId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PkApiId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Member="Description1" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="ResourceUri" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Description_DescriptionGame" Member="DescriptionGames" ThisKey="DescriptionId" OtherKey="DescriptionId" Type="DescriptionGame" />
+      <Association Name="Description_PokemonDescription" Member="PokemonDescriptions" ThisKey="DescriptionId" OtherKey="DescriptionId" Type="PokemonDescription" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DescriptionGame" Member="DescriptionGames">
+    <Type Name="DescriptionGame">
+      <Column Name="DescriptionGameId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DescriptionId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GameId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Description_DescriptionGame" Member="Description" ThisKey="DescriptionId" OtherKey="DescriptionId" Type="Description" IsForeignKey="true" />
+      <Association Name="Game_DescriptionGame" Member="Game" ThisKey="GameId" OtherKey="GameId" Type="Game" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Game" Member="Games">
+    <Type Name="Game">
+      <Column Name="GameId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PkApiId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Generation" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReleaseYear" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="ResourceUri" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Game_DescriptionGame" Member="DescriptionGames" ThisKey="GameId" OtherKey="GameId" Type="DescriptionGame" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Move" Member="Moves">
+    <Type Name="Move">
+      <Column Name="MoveId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PkApiId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Category" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Power" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PP" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Accuracy" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="ResourceUri" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Move_PokemonMove" Member="PokemonMoves" ThisKey="MoveId" OtherKey="MoveId" Type="PokemonMove" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Pokemon" Member="Pokemons">
+    <Type Name="Pokemon">
+      <Column Name="PokemonId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PkApiId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Hp" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Attack" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Defense" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SpAttack" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SpDefense" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Speed" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Height" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Weight" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Species" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="CatchRate" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Happiness" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MaleToFemale" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="ResourceUri" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Pokemon_PokemonAbility" Member="PokemonAbilities" ThisKey="PokemonId" OtherKey="PokemonId" Type="PokemonAbility" />
+      <Association Name="Pokemon_PokemonDescription" Member="PokemonDescriptions" ThisKey="PokemonId" OtherKey="PokemonId" Type="PokemonDescription" />
+      <Association Name="Pokemon_PokemonEvolution" Member="PokemonEvolutions" ThisKey="PokemonId" OtherKey="FromPokemonId" Type="PokemonEvolution" />
+      <Association Name="Pokemon_PokemonEvolution1" Member="PokemonEvolutions1" ThisKey="PokemonId" OtherKey="ToPokemonId" Type="PokemonEvolution" />
+      <Association Name="Pokemon_PokemonMove" Member="PokemonMoves" ThisKey="PokemonId" OtherKey="PokemonId" Type="PokemonMove" />
+      <Association Name="Pokemon_PokemonSprite" Member="PokemonSprites" ThisKey="PokemonId" OtherKey="PokemonId" Type="PokemonSprite" />
+      <Association Name="Pokemon_PokemonType" Member="PokemonTypes" ThisKey="PokemonId" OtherKey="PokemonId" Type="PokemonType" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PokemonAbility" Member="PokemonAbilities">
+    <Type Name="PokemonAbility">
+      <Column Name="PokemonAbilityId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PokemonId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AbilityId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Ability_PokemonAbility" Member="Ability" ThisKey="AbilityId" OtherKey="AbilityId" Type="Ability" IsForeignKey="true" />
+      <Association Name="Pokemon_PokemonAbility" Member="Pokemon" ThisKey="PokemonId" OtherKey="PokemonId" Type="Pokemon" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PokemonDescription" Member="PokemonDescriptions">
+    <Type Name="PokemonDescription">
+      <Column Name="PokemonDescriptionId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PokemonId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DescriptionId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Description_PokemonDescription" Member="Description" ThisKey="DescriptionId" OtherKey="DescriptionId" Type="Description" IsForeignKey="true" />
+      <Association Name="Pokemon_PokemonDescription" Member="Pokemon" ThisKey="PokemonId" OtherKey="PokemonId" Type="Pokemon" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PokemonEvolution" Member="PokemonEvolutions">
+    <Type Name="PokemonEvolution">
+      <Column Name="EvolutionId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FromPokemonId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ToPokemonId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PokemonLevel" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Method" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Pokemon_PokemonEvolution" Member="Pokemon" ThisKey="FromPokemonId" OtherKey="PokemonId" Type="Pokemon" IsForeignKey="true" />
+      <Association Name="Pokemon_PokemonEvolution1" Member="Pokemon1" ThisKey="ToPokemonId" OtherKey="PokemonId" Type="Pokemon" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PokemonMove" Member="PokemonMoves">
+    <Type Name="PokemonMove">
+      <Column Name="PokemonMoveId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PokemonId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MoveId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LearnType" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="PokemonLevel" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Move_PokemonMove" Member="Move" ThisKey="MoveId" OtherKey="MoveId" Type="Move" IsForeignKey="true" />
+      <Association Name="Pokemon_PokemonMove" Member="Pokemon" ThisKey="PokemonId" OtherKey="PokemonId" Type="Pokemon" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PokemonSprite" Member="PokemonSprites">
+    <Type Name="PokemonSprite">
+      <Column Name="PokemonSpriteId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PokemonId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SpriteId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Pokemon_PokemonSprite" Member="Pokemon" ThisKey="PokemonId" OtherKey="PokemonId" Type="Pokemon" IsForeignKey="true" />
+      <Association Name="Sprite_PokemonSprite" Member="Sprite" ThisKey="SpriteId" OtherKey="SpriteId" Type="Sprite" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PokemonType" Member="PokemonTypes">
+    <Type Name="PokemonType">
+      <Column Name="PokemonTypeId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PokemonId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Pokemon_PokemonType" Member="Pokemon" ThisKey="PokemonId" OtherKey="PokemonId" Type="Pokemon" IsForeignKey="true" />
+      <Association Name="Type_PokemonType" Member="Type" ThisKey="TypeId" OtherKey="TypeId" Type="Type" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Sprite" Member="Sprites">
+    <Type Name="Sprite">
+      <Column Name="SpriteId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PkApiId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Image" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="ResourceUri" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Sprite_PokemonSprite" Member="PokemonSprites" ThisKey="SpriteId" OtherKey="SpriteId" Type="PokemonSprite" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Type" Member="Types">
+    <Type Name="Type">
+      <Column Name="TypeId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PkApiId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="ResourceUri" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Type_TypeToTypeEffect" Member="TypeToTypeEffects" ThisKey="TypeId" OtherKey="TypeId" Type="TypeToTypeEffect" />
+      <Association Name="Type_TypeToTypeEffect1" Member="TypeToTypeEffects1" ThisKey="TypeId" OtherKey="AgainstTypeId" Type="TypeToTypeEffect" />
+      <Association Name="Type_PokemonType" Member="PokemonTypes" ThisKey="TypeId" OtherKey="TypeId" Type="PokemonType" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TypeEffect" Member="TypeEffects">
+    <Type Name="TypeEffect">
+      <Column Name="TypeEffectId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="TypeEffect_TypeToTypeEffect" Member="TypeToTypeEffects" ThisKey="TypeEffectId" OtherKey="TypeEffectId" Type="TypeToTypeEffect" />
+    </Type>
+  </Table>
+</Database>
