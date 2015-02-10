@@ -45,7 +45,7 @@ namespace PokedexApi.Controllers
                                                             spAttack = d.Pokemon.SpAttack,
                                                             spDefense = d.Pokemon.SpDefense,
                                                             speed = d.Pokemon.Speed,
-                                                            sprite = d.Sprite != null ? d.Sprite.Image : string.Empty
+                                                            image = d.Sprite != null ? d.Sprite.Image : string.Empty
                                                         })
                                  };
                 }
@@ -60,7 +60,44 @@ namespace PokedexApi.Controllers
 
         public HttpResponseMessage GetPokemon(int pokemonId)
         {
-            return this.Request.CreateResponse(HttpStatusCode.OK, "GetPokemon");
+            try
+            {
+                object result = null;
+
+                using (var context = new PokedexDataContext())
+                {
+                    var MaxHP = (from p in context.Pokemons
+                                 orderby p.Hp descending
+                                 select p.Hp).FirstOrDefault();
+
+                    result = (from pokemon in context.Pokemons
+                              where pokemon.PokemonId == pokemonId
+                              select new
+                              {
+                                  pokemonId = pokemon.PokemonId,
+                                  pkId = pokemon.PkApiId,
+                                  name = pokemon.Name,
+                                  hp = pokemon.Hp,
+                                  maxHp = MaxHP,
+                                  attack = pokemon.Attack,
+                                  defense = pokemon.Defense,
+                                  spAttack = pokemon.SpAttack,
+                                  spDefense = pokemon.SpDefense,
+                                  speed = pokemon.Speed,
+                                  height = pokemon.Height,
+                                  weight = pokemon.Weight,
+                                  species = pokemon.Species,
+                                  catchRate = pokemon.CatchRate,
+                                  maleToFemale = pokemon.MaleToFemale
+                              }).FirstOrDefault();
+                }
+
+                return this.Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception)
+            {
+                return this.Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
         }
 
         public HttpResponseMessage GetSpritesByPokemon(int pokemonId)
@@ -77,7 +114,12 @@ namespace PokedexApi.Controllers
                          where ps.PokemonId == pokemonId
                          select s).ToList();
 
-                    results = (from sprite in sprites select new { spriteId = sprite.SpriteId, image = sprite.Image });
+                    results = (from sprite in sprites
+                               select new
+                               {
+                                   spriteId = sprite.SpriteId,
+                                   image = sprite.Image
+                               }).FirstOrDefault();
                 }
 
                 return this.Request.CreateResponse(HttpStatusCode.OK, results);
@@ -98,7 +140,11 @@ namespace PokedexApi.Controllers
                 {
                     result = (from sprite in context.Sprites
                               where sprite.SpriteId == spriteId
-                              select new { spriteId = sprite.SpriteId, image = sprite.Image }).FirstOrDefault();
+                              select new 
+                              { 
+                                  spriteId = sprite.SpriteId, 
+                                  image = sprite.Image 
+                              }).FirstOrDefault();
                 }
 
                 return this.Request.CreateResponse(HttpStatusCode.OK, result);
@@ -111,12 +157,68 @@ namespace PokedexApi.Controllers
 
         public HttpResponseMessage GetDescriptionsByPokemon(int pokemonId)
         {
-            return this.Request.CreateResponse(HttpStatusCode.OK, "GetDescriptionsByPokemon");
+            try
+            {
+                object results = null;
+
+                using (var context = new PokedexDataContext())
+                {
+                    var descriptions = (from d in context.Descriptions
+                                        join pd in context.PokemonDescriptions on d.DescriptionId equals pd.DescriptionId
+                                        where pd.PokemonId == pokemonId
+                                        select new
+                                        {
+                                            descriptionId = d.DescriptionId,
+                                            description = d.Description1,
+                                            games = d.DescriptionGames.Select(dg => new { 
+                                                gameId = dg.Game.GameId,
+                                                name = dg.Game.Name,
+                                                generation = dg.Game.Generation,
+                                                releaseYear = dg.Game.ReleaseYear
+                                            })
+                                        }).ToList();
+
+                    results = descriptions;
+                }
+
+                return this.Request.CreateResponse(HttpStatusCode.OK, results);
+            }
+            catch (Exception)
+            {
+                return this.Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
         }
 
         public HttpResponseMessage GetDescription(int descriptionId)
         {
-            return this.Request.CreateResponse(HttpStatusCode.OK, "GetDescription");
+            try
+            {
+                object result = null;
+
+                using (var context = new PokedexDataContext())
+                {
+                    result = (from description in context.Descriptions
+                              where description.DescriptionId == descriptionId
+                              select new
+                              {
+                                  descriptionId = description.DescriptionId,
+                                  description = description.Description1,
+                                  games = description.DescriptionGames.Select(dg => new
+                                  {
+                                      gameId = dg.Game.GameId,
+                                      name = dg.Game.Name,
+                                      generation = dg.Game.Generation,
+                                      releaseYear = dg.Game.ReleaseYear
+                                  })
+                              }).FirstOrDefault();
+                }
+
+                return this.Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception)
+            {
+                return this.Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
         }
 
         public HttpResponseMessage GetTypesByPokemon(int pokemonId)
@@ -131,12 +233,70 @@ namespace PokedexApi.Controllers
 
         public HttpResponseMessage GetMovesByPokemon(int pokemonId)
         {
-            return this.Request.CreateResponse(HttpStatusCode.OK, "GetMovesByPokemon");
+            try
+            {
+                object results = null;
+
+                using (var context = new PokedexDataContext())
+                {
+                    var moves = (from m in context.Moves
+                                 join pm in context.PokemonMoves on m.MoveId equals pm.MoveId
+                                 where pm.PokemonId == pokemonId
+                                 select new
+                                 {
+                                     moveId = m.MoveId,
+                                     name = m.Name,
+                                     description = m.Description,
+                                     category = m.Category,
+                                     power = m.Power,
+                                     pp = m.PP,
+                                     accuracy = m.Accuracy,
+                                     learnType = pm.LearnType,
+                                     level = pm.PokemonLevel
+                                 }).ToList();
+
+                    results = moves;
+                }
+
+                return this.Request.CreateResponse(HttpStatusCode.OK, results);
+            }
+            catch (Exception)
+            {
+                return this.Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
         }
 
         public HttpResponseMessage GetMove(int moveId)
         {
-            return this.Request.CreateResponse(HttpStatusCode.OK, "GetMove");
+            try
+            {
+                object result = null;
+
+                using (var context = new PokedexDataContext())
+                {
+                    result = (from move in context.Moves
+                              join pm in context.PokemonMoves on move.MoveId equals pm.MoveId
+                              where move.MoveId == moveId
+                               select new
+                               {
+                                   moveId = move.MoveId,
+                                   name = move.Name,
+                                   description = move.Description,
+                                   category = move.Category,
+                                   power = move.Power,
+                                   pp = move.PP,
+                                   accuracy = move.Accuracy,
+                                   learnType = pm.LearnType,
+                                   level = pm.PokemonLevel
+                               }).FirstOrDefault();
+                }
+
+                return this.Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception)
+            {
+                return this.Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
         }
 
         public HttpResponseMessage GetAbilitiesByPokemon(int pokemonId)
@@ -197,12 +357,59 @@ namespace PokedexApi.Controllers
 
         public HttpResponseMessage GetEvolutionChainByPokemon(int pokemonId)
         {
-            return this.Request.CreateResponse(HttpStatusCode.OK, "GetEvolutionChainByPokemon");
+            return this.Request.CreateResponse(HttpStatusCode.OK, "GetTypesByPokemon");
         }
 
         public HttpResponseMessage GetNavigationByPokemon(int pokemonId)
         {
-            return this.Request.CreateResponse(HttpStatusCode.OK, "GetNavigationByPokemon");
+            try
+            {
+                object result = null;
+
+                using (var context = new PokedexDataContext())
+                {
+                    var current = (from pokemon in context.Pokemons
+                                   where pokemon.PokemonId == pokemonId
+                                   select pokemon).FirstOrDefault();
+
+                    if (current != null)
+                    {
+                        var previous = (from pokemon in context.Pokemons
+                                        where pokemon.PkApiId == (current.PkApiId - 1)
+                                        let sprite = pokemon.PokemonSprites.Select(ps => ps.Sprite).FirstOrDefault()
+                                        select new
+                                        {
+                                            pokemonId = pokemon.PokemonId,
+                                            pkId = pokemon.PkApiId,
+                                            name = pokemon.Name,
+                                            image = sprite != null ? sprite.Image : string.Empty
+                                        }).FirstOrDefault();
+
+                        var next = (from pokemon in context.Pokemons
+                                    where pokemon.PkApiId == (current.PkApiId + 1)
+                                    let sprite = pokemon.PokemonSprites.Select(ps => ps.Sprite).FirstOrDefault()
+                                    select new
+                                    {
+                                        pokemonId = pokemon.PokemonId,
+                                        pkId = pokemon.PkApiId,
+                                        name = pokemon.Name,
+                                        image = sprite != null ? sprite.Image : string.Empty
+                                    }).FirstOrDefault();
+
+                        result = new
+                        {
+                            previous = previous,
+                            next = next
+                        };
+                    }
+                }
+
+                return this.Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception)
+            {
+                return this.Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

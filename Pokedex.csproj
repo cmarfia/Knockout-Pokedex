@@ -91,6 +91,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
+    <Content Include="JavaScript\ko.pager.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
@@ -100,6 +101,7 @@
     <Content Include="Scripts\knockout-postbox.js" />
     <Content Include="Scripts\knockout-postbox.min.js" />
     <Content Include="Scripts\npm.js" />
+    <Content Include="styles.css" />
     <Content Include="ViewModels\MovesViewModel.js" />
     <Content Include="ViewModels\EvolutionChainViewModel.js" />
     <Content Include="ViewModels\TypesViewModel.js" />
