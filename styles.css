@@ -1,3 +1,24 @@
-﻿#pokedex-grid img {width: 120px;}
+﻿img.sprite {width: 120px;height:120px;}
 #pokedex-grid th { text-align: center;}
 #pokedex-grid td { vertical-align:middle;text-align:center;}
+#sprites-display { padding-top:25px;}
+#wizard-display { border-bottom: 2px solid #ededed; }
+.wizard-back { margin: 60px 0 3px 0; display:block;}
+.description {border-left: 1px solid #ededed;}
+
+#descriptions-display .game { width: 10%; }
+#descriptions-display .generation { width: 10%; }
+#descriptions-display .release { width: 10%; }
+#descriptions-display .description { width: 70%; }
+
+
+.demo-table.table > thead > tr > th,
+.demo-table.table > tbody > tr > th,
+.demo-table.table > tfoot > tr > th,
+.demo-table.table > thead > tr > td,
+.demo-table.table > tbody > tr > td,
+.demo-table.table > tfoot > tr > td { border:none;}
+
+.demo-table .row-header { border-top: 1px solid #bdbdbd; }
+
+.heading { border-bottom: 1px solid #bdbdbd; }

@@ -8,7 +8,7 @@
 <body>
     <div class="container">
         <header>
-            <h3>Pokedex Demo</h3>
+            <h3>Modular Knockout - Pokedex Demo</h3>
         </header>
         <div class="row" id="pokedex-grid" data-bind="visible: activePokemon() == 0">
             <table class="table table-hover">
@@ -28,7 +28,7 @@
                 </thead>
                 <tbody data-bind="foreach: pokedex">
                     <tr data-bind="click: $parent.activatePokemon.bind($data)">
-                        <td><img data-bind="attr: { src: imageSrc}" /></td>
+                        <td><img class="img-thumbnail sprite" data-bind="attr: { src: imageSrc}" /></td>
                         <td data-bind="text: displayName"></td>
                         <td data-bind="text: hp"></td>
                         <td data-bind="text: attack"></td>
@@ -45,13 +45,147 @@
             <div class="pagination" data-bind="template: { name: 'tpl-pager', data: pager }"></div>
             <!-- /ko -->
         </div>
-        <div class="row">
-            <div class="col-xs-4" id="sprites-display" data-bind="visible: activePokemon() != 0">
-                <input type="text" data-bind="value: activePokemon" />
-                <!-- ko foreach: sprites -->
-                    <img data-bind="attr: { src: imageSrc }" />
+        <div class="row" id="wizard-display" data-bind="visible: visible">
+            <div class="col-xs-4 text-left">
+                <!-- ko if:previous().hasData -->
+                <a data-bind="click: showPrevious, visible: previous().hasData">
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                    <span data-bind="text: previous().displayName"></span>
+                    <img class="sprite" data-bind="attr: { src: previous().imageSrc }" />
+                </a>
                 <!-- /ko -->
             </div>
+            <div class="col-xs-4 text-center">
+                <a data-bind="click: backToPokedex" class="wizard-back">
+                    <i class="glyphicon glyphicon-chevron-up"></i>
+                    Back To Pokedex
+                    <i class="glyphicon glyphicon-chevron-up"></i>
+                </a>
+            </div>
+            <div class="col-xs-4 text-right">
+                <!-- ko if:next().hasData -->
+                <a data-bind="click: showNext">
+                    <img class="sprite" data-bind="attr: { src: next().imageSrc }" />
+                    <span data-bind="text: next().displayName"></span>
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+                <!-- /ko -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2" id="sprites-display" data-bind="visible: activePokemon() != 0">
+                <!-- ko foreach: sprites -->
+                    <img data-bind="attr: { src: imageSrc }"  class="img-thumbnail sprite">
+                <!-- /ko -->
+            </div>
+            <div class="col-xs-10" id="stats-display" data-bind="visible: visible">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <h2 data-bind="text: pokemon().displayName" class="col-xs-8"></h2>
+                        <div class="media col-xs-2">
+                            <div class="media-body">
+                                <h4 class="media-heading">Height:</h4>
+                                <span data-bind="text: pokemon().height()"></span>
+                            </div>
+                        </div>
+                        <div class="media col-xs-2">
+                            <div class="media-body">
+                                <h4 class="media-heading">Weight:</h4>
+                                <span data-bind="text: pokemon().weight()"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>HP:</h4>
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-success" role="progressbar"  data-bind="text: pokemon().hp, attr: { style: pokemon().hpWidth }"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h4>Attack:</h4>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-danger" role="progressbar"  data-bind="text: pokemon().attack, attr: { style: pokemon().attackWidth }"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <h4>SP. Attack:</h4>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-danger" role="progressbar"  data-bind="text: pokemon().spAttack, attr: { style: pokemon().spAttackWidth }"></div>
+                            </div>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h4>Defense:</h4>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-warning" role="progressbar"  data-bind="text: pokemon().defense, attr: { style: pokemon().defenseWidth }"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <h4>SP. Defense:</h4>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-warning" role="progressbar"  data-bind="text: pokemon().spDefense, attr: { style: pokemon().spDefenseWidth }"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>Speed:</h4>
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-info" role="progressbar"  data-bind="text: pokemon().speed, attr: { style: pokemon().speedWidth }"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="descriptions-display" data-bind="visible: visible">
+            <h3 class="heading">Descriptions:</h3>
+            <table class="table demo-table table-hover">
+                <thead>
+                    <tr>
+                        <th class="game">Game Name</th>
+                        <th class="generation">Generation</th>
+                        <th class="release">Release Year</th>
+                        <th class="description">Description</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: descriptions">
+                    <!-- ko foreach: games -->
+                    <tr data-bind="css: { 'row-header': $index() == 0 }">
+                        <td class="game" data-bind="text: name"></td>
+                        <!-- ko if: $index() == 0 -->
+                        <td class="generation text-center" data-bind="text: generation, attr: { rowspan: $parent.numGames }"></td>
+                        <td class="release text-center" data-bind="text: releaseYear, attr: { rowspan: $parent.numGames }"></td>
+                        <td class="description" data-bind="text: $parent.description, attr: { rowspan: $parent.numGames }"></td>
+                        <!-- /ko -->
+                    </tr>
+                    <!-- /ko -->
+                </tbody>
+            </table>
+        </div>
+        <div class="row" id="moves-display" data-bind="visible: visible">
+            <h3 class="heading">Moves:</h3>
+            <!-- ko foreach: learnTypes -->
+                <!-- ko if: $root.moves.index.learnType()[$data] != undefined && $root.moves.index.learnType()[$data].length > 0 -->
+                <h4 class="text-capitalize text-center" data-bind="text: 'Learn Type: ' + $data"></h4>
+                <table class="table demo-table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Power</th>
+                            <th>PP</th>
+                            <th>Accuracy</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: $root.moves.index.learnType()[$data]">
+                        <tr>
+                            <td data-bind="text: name"></td>
+                            <td data-bind="text: power" class="text-center"></td>
+                            <td data-bind="text: pp" class="text-center"></td>
+                            <td data-bind="text: accuracy" class="text-center"></td>
+                            <td data-bind="text: description"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- /ko -->
+            <!-- /ko -->
         </div>
     </div>
 
@@ -110,136 +244,11 @@
     <script src="JavaScript/ko.pager.js"></script>
 
     <!-- Load View Models -->
-    <script src="ViewModels/WizardViewModel.js"></script>
-    <script src="ViewModels/DescriptionsViewModel.js"></script>
-    <script src="ViewModels/EvolutionChainViewModel.js"></script>
-    <script src="ViewModels/MovesViewModel.js"></script>
     <script src="ViewModels/PokedexViewModel.js"></script>
+    <script src="ViewModels/WizardViewModel.js"></script>
     <script src="ViewModels/SpriteViewModel.js"></script>
     <script src="ViewModels/StatsViewModel.js"></script>
-    <script src="ViewModels/TypesViewModel.js"></script>
+    <script src="ViewModels/DescriptionsViewModel.js"></script>
+    <script src="ViewModels/MovesViewModel.js"></script>
 </body>
 </html>
-
-<!--<script>
-    var uri = 'api/pokedex/',
-        doneFunc = function (data) {
-            console.log(data);
-            $("#message-box").append("<p>" + JSON.stringify(data) + "</p>");
-        };
-
-
-    $(document).ready(function () {
-        $.ajax({
-            url: uri + 'GetPokedex',
-            type: "GET",
-            data: { pageNumber: 1, pageSize: 10 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetPokemon',
-            type: "GET",
-            data: { pokemonId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetSpritesByPokemon',
-            type: "GET",
-            data: { pokemonId: 732 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetSprite',
-            type: "GET",
-            data: { spriteId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetDescriptionsByPokemon',
-            type: "GET",
-            data: { pokemonId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetDescription',
-            type: "GET",
-            data: { descriptionId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetTypesByPokemon',
-            type: "GET",
-            data: { pokemonId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetType',
-            type: "GET",
-            data: { typeId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetMovesByPokemon',
-            type: "GET",
-            data: { pokemonId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetMove',
-            type: "GET",
-            data: { moveId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetAbilitiesByPokemon',
-            type: "GET",
-            data: { pokemonId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetAbility',
-            type: "GET",
-            data: { abilityId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetEvolutionChainByPokemon',
-            type: "GET",
-            data: { pokemonId: 732 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-
-        $.ajax({
-            url: uri + 'GetNavigationByPokemon',
-            type: "GET",
-            data: { pokemonId: 1 },
-            dataType: "json"
-        })
-        .done(doneFunc);
-    });
-</script>-->

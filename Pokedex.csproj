@@ -103,8 +103,6 @@
     <Content Include="Scripts\npm.js" />
     <Content Include="styles.css" />
     <Content Include="ViewModels\MovesViewModel.js" />
-    <Content Include="ViewModels\EvolutionChainViewModel.js" />
-    <Content Include="ViewModels\TypesViewModel.js" />
     <Content Include="ViewModels\DescriptionsViewModel.js" />
     <Content Include="ViewModels\StatsViewModel.js" />
     <Content Include="ViewModels\SpriteViewModel.js" />

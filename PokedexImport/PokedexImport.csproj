@@ -64,7 +64,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="SQL\App.config" />
     <None Include="packages.config" />
     <None Include="Pokedex.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>

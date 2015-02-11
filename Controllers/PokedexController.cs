@@ -20,8 +20,10 @@ namespace PokedexApi.Controllers
                 {
                     var preFilteredData =
                         (from p in context.Pokemons
+                         let s = p.PokemonSprites.Select(ps => ps.Sprite).FirstOrDefault()
+                         where s != null
                          orderby p.PkApiId
-                         select new { Pokemon = p, Sprite = p.PokemonSprites.Select(ps => ps.Sprite).FirstOrDefault() });
+                         select new { Pokemon = p, Sprite = s });
 
                     var totalRecords = preFilteredData.Count();
                     var data = preFilteredData.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
@@ -70,6 +72,27 @@ namespace PokedexApi.Controllers
                                  orderby p.Hp descending
                                  select p.Hp).FirstOrDefault();
 
+                    var MaxAttack = (from p in context.Pokemons
+                                 orderby p.Attack descending
+                                     select p.Attack).FirstOrDefault();
+
+                    var MaxDefense = (from p in context.Pokemons
+                                 orderby p.Defense descending
+                                 select p.Defense).FirstOrDefault();
+
+                    var MaxSPAttack = (from p in context.Pokemons
+                                 orderby p.SpAttack descending
+                                 select p.SpAttack).FirstOrDefault();
+
+                    var MaxSPDefense = (from p in context.Pokemons
+                                        orderby p.SpDefense descending
+                                        select p.SpDefense).FirstOrDefault();
+
+                    var MaxSpeed = (from p in context.Pokemons
+                                        orderby p.Speed descending
+                                        select p.Speed).FirstOrDefault();
+                    
+
                     result = (from pokemon in context.Pokemons
                               where pokemon.PokemonId == pokemonId
                               select new
@@ -80,10 +103,15 @@ namespace PokedexApi.Controllers
                                   hp = pokemon.Hp,
                                   maxHp = MaxHP,
                                   attack = pokemon.Attack,
+                                  maxAttack = MaxAttack,
                                   defense = pokemon.Defense,
+                                  maxDefense = MaxDefense,
                                   spAttack = pokemon.SpAttack,
+                                  maxSpAttack = MaxSPAttack,
                                   spDefense = pokemon.SpDefense,
+                                  maxSpDefense = MaxSPDefense,
                                   speed = pokemon.Speed,
+                                  maxSpeed = MaxSpeed,
                                   height = pokemon.Height,
                                   weight = pokemon.Weight,
                                   species = pokemon.Species,
@@ -112,14 +140,14 @@ namespace PokedexApi.Controllers
                         (from s in context.Sprites
                          join ps in context.PokemonSprites on s.SpriteId equals ps.SpriteId
                          where ps.PokemonId == pokemonId
-                         select s).ToList();
+                         select s).Take(1).ToList();
 
                     results = (from sprite in sprites
                                select new
                                {
                                    spriteId = sprite.SpriteId,
                                    image = sprite.Image
-                               }).FirstOrDefault();
+                               });
                 }
 
                 return this.Request.CreateResponse(HttpStatusCode.OK, results);
